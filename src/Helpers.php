@@ -7,9 +7,9 @@ namespace Baraja\AdminBar;
 
 final class Helpers
 {
-	public static function escapeHtml($s): string
+	public static function escapeHtml(string $s): string
 	{
-		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
 
 

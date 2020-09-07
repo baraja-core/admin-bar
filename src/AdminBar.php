@@ -28,7 +28,7 @@ final class AdminBar
 	/** @var Panel[] */
 	private static $panels = [];
 
-	/** @var string[] */
+	/** @var true[] (type => true) */
 	private static $panelTypes = [];
 
 	/** @var MenuLink[]|null[] */
