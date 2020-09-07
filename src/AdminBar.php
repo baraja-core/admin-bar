@@ -103,10 +103,17 @@ final class AdminBar
 			return;
 		}
 
-		echo self::render();
+		try {
+			echo self::render();
+		} catch (\Throwable $e) {
+			echo 'Can not render admin bar.';
+		}
 	}
 
 
+	/**
+	 * @throws \Throwable
+	 */
 	private static function render(): string
 	{
 		usort(self::$panels, static function (Panel $a, Panel $b): int {
@@ -117,20 +124,16 @@ final class AdminBar
 			return $left > $b->getPriority() ? 1 : -1;
 		});
 
-		return ((static function () {
-				ob_start(
-					static function () {
-					}
-				);
-				try {
-					[$basePath, $user, $panels, $menuLinks] = [Helpers::getBaseUrl(), self::$user, self::$panels, self::$menuLinks];
-					require __DIR__ . '/assets/content.phtml';
+		ob_start(static function () {});
+		try {
+			[$basePath, $user, $panels, $menuLinks] = [Helpers::getBaseUrl(), self::$user, self::$panels, self::$menuLinks];
+			require __DIR__ . '/assets/content.phtml';
 
-					return ob_get_clean();
-				} catch (\Throwable $e) {
-					ob_end_clean();
-					throw $e;
-				}
-			})()) . '<style>' . Helpers::minifyHtml(file_get_contents(__DIR__ . '/assets/style.css')) . '</style>';
+			$return = ob_get_clean();
+		} catch (\Throwable $e) {
+			ob_end_clean();
+			throw $e;
+		}
+		return $return . '<style>' . Helpers::minifyHtml(file_get_contents(__DIR__ . '/assets/style.css')) . '</style>';
 	}
 }
