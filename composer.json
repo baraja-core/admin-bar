@@ -12,6 +12,7 @@
 		"php": ">=7.1.0",
 		"nette/utils": "^3.0",
 		"nette/security": "^3.0",
+		"nette/di": "^3.0",
 		"baraja-core/localization": "^1.0"
 	},
 	"require-dev": {
