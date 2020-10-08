@@ -27,30 +27,47 @@ namespace Baraja\AdminBar;
 					?>
 				</ul>
 			</td>
-			<td class="admin-bar-user" width="200" role="navigation">
-				<span class="admin-bar-identity text-nowrap">
-				<?php
-				echo Helpers::escapeHtml($user !== null ? ($user->getName() ?? 'Guest') : 'Guest');
-				echo ($user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '')
-				?>
-				</span>
+			<td class="admin-bar-panel" width="85" onclick="window.open('https://help.baraja.cz', '_blank')">
+				<table>
+					<tr>
+						<td style="width:40px;text-align:right"><?= Helpers::iconHelp() ?></td>
+						<td class="admin-bar-panel__label">Help</td>
+					</tr>
+				</table>
+			</td>
+			<td class="admin-bar-panel admin-bar-user" role="navigation">
+				<table>
+					<tr>
+						<td style="width:50% !important"></td>
+						<td style="width:40px;text-align:right"><?= Helpers::iconUser() ?></td>
+						<td class="admin-bar-panel__label">
+							<span class="admin-bar-identity text-nowrap">
+							<?php
+							echo Helpers::escapeHtml($user !== null ? ($user->getName() ?? 'Guest') : 'Guest');
+							echo ($user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '')
+							?>
+							</span>
+						</td>
+						<td style="width:50% !important"></td>
+					</tr>
+				</table>
 				<ul>
-					<?php
-					if ($user !== null) {
-						echo '<li class="text-left"><a href="' . $basePath . '/admin" class="ml-2">Dashboard</a></li>';
-						echo '<hr class="w-100 my-2">';
-					}
+				<?php
+				if ($user !== null) {
+					echo '<li class="text-left"><a href="' . $basePath . '/admin" class="ml-2">Dashboard</a></li>';
+					echo '<hr class="w-100 my-2">';
+				}
 
-		  		foreach ($menuLinks as $menuLink) {
-		  			if ($menuLink === null) {
-							echo '<hr class="w-100 my-2">';
-						} else {
-							echo '<li class="text-left">';
-							echo '<a href="' . $menuLink->getUrl() . '" class="ml-2">' . Helpers::escapeHtml($menuLink->getLabel()) . '</a>';
-							echo '</li>';
-						}
+				foreach ($menuLinks as $menuLink) {
+					if ($menuLink === null) {
+						echo '<hr class="w-100 my-2">';
+					} else {
+						echo '<li class="text-left">';
+						echo '<a href="' . $menuLink->getUrl() . '" class="ml-2">' . Helpers::escapeHtml($menuLink->getLabel()) . '</a>';
+						echo '</li>';
 					}
-					?>
+				}
+				?>
 				</ul>
 			</td>
 		</tr>
