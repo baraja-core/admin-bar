@@ -14,25 +14,23 @@ final class AdminBar
 	public const MODE_AUTODETECT = null;
 
 	/** @var int size of reserved memory */
-	public static $reservedMemorySize = 500000;
+	public static int $reservedMemorySize = 500000;
 
-	/** @var bool */
-	private static $enabled = false;
+	private static bool $enabled = false;
 
 	/** @var string|null reserved memory; also prevents double rendering */
-	private static $reserved;
+	private static ?string $reserved;
 
-	/** @var User|null */
-	private static $user;
+	private static ?User $user;
 
 	/** @var Panel[] */
-	private static $panels = [];
+	private static array $panels = [];
 
 	/** @var true[] (type => true) */
-	private static $panelTypes = [];
+	private static array $panelTypes = [];
 
 	/** @var MenuLink[]|null[] */
-	private static $menuLinks = [];
+	private static array $menuLinks = [];
 
 
 	/**

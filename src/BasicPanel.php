@@ -10,12 +10,9 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
+	private Localization $localization;
 
-	/** @var Localization */
-	private $localization;
-
-	/** @var User */
-	private $user;
+	private User $user;
 
 
 	public function __construct(Localization $localization, User $user)

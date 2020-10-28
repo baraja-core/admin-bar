@@ -10,12 +10,9 @@ use Nette\Utils\Validators;
 
 final class MenuLink
 {
+	private string $label;
 
-	/** @var string */
-	private $label;
-
-	/** @var string */
-	private $url;
+	private string $url;
 
 
 	public function __construct(string $label, string $url)
