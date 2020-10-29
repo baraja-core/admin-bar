@@ -13,7 +13,7 @@ final class AdminBarExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition('adminBar.basicPanel')
+		$builder->addDefinition($this->prefix('basicPanel'))
 			->setFactory(BasicPanel::class)
 			->setAutowired(BasicPanel::class);
 	}
