@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
+use Nette\Utils\FileSystem;
+
 final class AdminBar
 {
 	public const MODE_ENABLED = true;
@@ -132,6 +134,7 @@ final class AdminBar
 			ob_end_clean();
 			throw $e;
 		}
-		return $return . '<style>' . Helpers::minifyHtml(file_get_contents(__DIR__ . '/assets/style.css')) . '</style>';
+
+		return $return . '<style>' . Helpers::minifyHtml(FileSystem::read(__DIR__ . '/assets/style.css')) . '</style>';
 	}
 }
