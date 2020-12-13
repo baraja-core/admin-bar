@@ -60,7 +60,7 @@ final class Helpers
 
 	public static function minifyHtml(string $haystack): string
 	{
-		return preg_replace_callback(
+		return (string) preg_replace_callback(
 			'#[ \t\r\n]+|<(/)?(textarea|pre)(?=\W)#i',
 			static function (array $match) {
 				return empty($match[2]) ? ' ' : $match[0];

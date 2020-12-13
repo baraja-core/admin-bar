@@ -30,7 +30,7 @@ final class BasicPanel implements Panel
 		return '<a href="' . ($baseUrl = Helpers::getBaseUrl()) . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Home</a>'
 			. '&nbsp;&nbsp;&nbsp;'
 			. '<a href="' . $baseUrl . '/admin' . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Admin</a>'
-			. $this->processApiDocumentation($baseUrl);
+			. $this->processApiDocumentation((string) $baseUrl);
 	}
 
 
