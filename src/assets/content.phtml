@@ -39,7 +39,15 @@ namespace Baraja\AdminBar;
 				<table>
 					<tr>
 						<td style="width:50% !important"></td>
-						<td style="width:40px;text-align:right"><?= Helpers::iconUser() ?></td>
+						<td style="width:40px;text-align:right">
+						<?php
+							if (($avatarUrl = $user !== null ? $user->getAvatarUrl() : null) !== null) {
+								echo '<img src="' . $avatarUrl . '" alt="Avatar" style="max-width:32px !important;max-height:32px !important;margin:0 8px !important">';
+							} else {
+								echo Helpers::iconUser();
+							}
+						?>
+						</td>
 						<td class="admin-bar-panel__label">
 							<span class="admin-bar-identity text-nowrap">
 							<?php
