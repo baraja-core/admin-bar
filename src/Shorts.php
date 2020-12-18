@@ -306,7 +306,7 @@ final class Shorts
 		$parts = $this->explode($full);
 
 		/* @phpstan-ignore-next-line */
-		return $this->implode(array_merge(array_map(fn(string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
+		return $this->implode(array_merge(array_map(fn (string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
 	}
 
 
@@ -352,7 +352,7 @@ final class Shorts
 	private function explode(string $input): array
 	{
 		/* @phpstan-ignore-next-line */
-		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn(string $s): bool => $s !== ''));
+		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn (string $s): bool => $s !== ''));
 	}
 
 
