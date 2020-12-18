@@ -21,9 +21,9 @@ final class AdminBar
 	private static bool $enabled = false;
 
 	/** @var string|null reserved memory; also prevents double rendering */
-	private static ?string $reserved;
+	private static ?string $reserved = null;
 
-	private static ?User $user;
+	private static ?User $user = null;
 
 	/** @var Panel[] */
 	private static array $panels = [];
