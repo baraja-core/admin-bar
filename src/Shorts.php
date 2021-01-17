@@ -284,7 +284,6 @@ final class Shorts
 		$parts = $this->explode($full);
 		$first = array_shift($parts);
 
-		/* @phpstan-ignore-next-line */
 		return $this->implode(array_merge([$first], array_map(function (string $p): string {
 			return $p[0]; // return the first letter, the initial
 		}, $parts)), $suffix, $glue);
@@ -304,7 +303,6 @@ final class Shorts
 		}
 		$parts = $this->explode($full);
 
-		/* @phpstan-ignore-next-line */
 		return $this->implode(array_merge(array_map(fn (string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
 	}
 
@@ -350,7 +348,7 @@ final class Shorts
 	 */
 	private function explode(string $input): array
 	{
-		/* @phpstan-ignore-next-line */
+		/** @phpstan-ignore-next-line */
 		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn (string $s): bool => $s !== ''));
 	}
 
