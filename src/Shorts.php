@@ -176,7 +176,6 @@ final class Shorts
 		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$firstName]), $minimalReduction);
 		/** @var string[] $reduced */
 		/** @var int $reduction */
-		/* @phpstan-ignore-next-line */
 		$tmp = array_pop($reduced);
 		array_unshift($reduced, $tmp);
 		if ($reduction >= $minimalReduction) {
@@ -360,14 +359,14 @@ final class Shorts
 	 * Put the parts together.
 	 * To each initial add a dot ($suffix), and glue all parts together with a space ($glue).
 	 *
-	 * @param string[] $parts
+	 * @param string[]|null[] $parts
 	 * @param string $suffix suffix added to each produced initial, usually this would be empty to produce "AB" or a dot to produce "A. Bee"
 	 * @param string $glue glue to put the parts together, usually an empty string to produce "AB" or a space to produce "A. Bee"
 	 */
 	private function implode(array $parts, string $suffix = '.', string $glue = ' '): string
 	{
-		return implode($glue, array_map(function (string $p) use ($suffix): string {
-			return $p . (strlen($p) === 1 ? $suffix : '');
+		return implode($glue, array_map(static function (?string $p) use ($suffix): string {
+			return $p . (strlen((string) $p) === 1 ? $suffix : '');
 		}, $parts));
 	}
 }
