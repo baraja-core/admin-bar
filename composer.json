@@ -13,7 +13,8 @@
 		"nette/utils": "^3.0",
 		"nette/security": "^3.0",
 		"nette/di": "^3.0",
-		"baraja-core/localization": "^1.0"
+		"baraja-core/localization": "^1.0",
+		"baraja-core/url": "^1.0"
 	},
 	"require-dev": {
 		"phpstan/phpstan": "^0.12.18",

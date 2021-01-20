@@ -6,6 +6,7 @@ namespace Baraja\AdminBar;
 
 
 use Baraja\Localization\Localization;
+use Baraja\Url\Url;
 use Nette\Security\User;
 
 final class BasicPanel implements Panel
@@ -27,7 +28,7 @@ final class BasicPanel implements Panel
 		$default = $this->localization->getDefaultLocale();
 		$current = $this->localization->getLocale() ?? $default;
 
-		return '<a href="' . ($baseUrl = Helpers::getBaseUrl()) . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Home</a>'
+		return '<a href="' . ($baseUrl = Url::get()->getBaseUrl()) . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Home</a>'
 			. '&nbsp;&nbsp;&nbsp;'
 			. '<a href="' . $baseUrl . '/admin' . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Admin</a>'
 			. $this->processApiDocumentation((string) $baseUrl);

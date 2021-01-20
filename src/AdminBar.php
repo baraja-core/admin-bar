@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
+use Baraja\Url\Url;
 use Nette\Utils\FileSystem;
 
 final class AdminBar
@@ -126,7 +127,7 @@ final class AdminBar
 
 		ob_start(static function () {});
 		try {
-			[$basePath, $user, $panels, $menuLinks] = [Helpers::getBaseUrl(), self::$user, self::$panels, self::$menuLinks];
+			[$basePath, $user, $panels, $menuLinks] = [Url::get()->getBaseUrl(), self::$user, self::$panels, self::$menuLinks];
 			require __DIR__ . '/assets/content.phtml';
 
 			$return = ob_get_clean();
