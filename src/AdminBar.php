@@ -138,12 +138,13 @@ final class AdminBar
 		});
 		try {
 			$args = [
-				'$basePath' => Url::get()->getBaseUrl(),
-				'$user' => self::$user,
-				'$panels' => self::$panels,
-				'$menuLinks' => self::$menuLinks,
+				'basePath' => Url::get()->getBaseUrl(),
+				'user' => self::$user,
+				'panels' => self::$panels,
+				'menuLinks' => self::$menuLinks,
 			];
 
+			/** @phpstan-ignore-next-line */
 			extract($args, EXTR_OVERWRITE);
 
 			require __DIR__ . '/assets/content.phtml';
