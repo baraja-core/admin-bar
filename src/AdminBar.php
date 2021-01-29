@@ -44,7 +44,10 @@ final class AdminBar
 		if (PHP_SAPI === 'cli') { // cli mode
 			$enabled = false;
 		}
-		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') { // ajax request
+		if (
+			isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+			&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+		) { // ajax request
 			$enabled = false;
 		}
 		if (Helpers::isHtmlMode() === false) { // render only to HTML
@@ -55,7 +58,7 @@ final class AdminBar
 		}
 
 		self::$reserved = str_repeat('b', self::$reservedMemorySize);
-		register_shutdown_function([__CLASS__, 'shutdownHandler']);
+		register_shutdown_function([self::class, 'shutdownHandler']);
 	}
 
 

@@ -52,7 +52,14 @@ final class BasicPanel implements Panel
 	 */
 	private function processApiDocumentation(string $baseUrl): ?string
 	{
-		if (\class_exists('\Baraja\StructuredApi\Doc\Documentation') === false || $this->user->isLoggedIn() === false || ($this->user->isInRole('admin') === false && $this->user->isInRole('api-developer') === false)) {
+		if (
+			\class_exists('\Baraja\StructuredApi\Doc\Documentation') === false
+			|| $this->user->isLoggedIn() === false
+			|| (
+				$this->user->isInRole('admin') === false
+				&& $this->user->isInRole('api-developer') === false
+			)
+		) {
 			return null;
 		}
 

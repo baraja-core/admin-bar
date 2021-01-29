@@ -25,10 +25,8 @@ final class Helpers
 	{
 		return (string) preg_replace_callback(
 			'#[ \t\r\n]+|<(/)?(textarea|pre)(?=\W)#i',
-			static function (array $match) {
-				return empty($match[2]) ? ' ' : $match[0];
-			},
-			$haystack
+			static fn (array $match) => empty($match[2]) ? ' ' : $match[0],
+			$haystack,
 		);
 	}
 

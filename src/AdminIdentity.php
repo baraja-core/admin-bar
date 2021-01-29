@@ -15,8 +15,13 @@ final class AdminIdentity extends Identity
 	private ?string $avatarUrl = null;
 
 
-	public function __construct(string $id, ?array $roles = null, ?iterable $data = null, ?string $name = null, ?string $avatarUrl = null)
-	{
+	public function __construct(
+		string $id,
+		?array $roles = null,
+		?iterable $data = null,
+		?string $name = null,
+		?string $avatarUrl = null
+	) {
 		parent::__construct($id, $roles, $data);
 		$this->name = $name;
 		if ($avatarUrl !== null) {
