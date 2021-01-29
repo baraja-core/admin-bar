@@ -103,6 +103,100 @@ final class Shorts
 	}
 
 
+	/**
+	 * @param string[] $significantNames
+	 * @param string[] $middleNames
+	 */
+	public function significantLastName(
+		int $limit,
+		int $minimalReduction,
+		array $significantNames,
+		array $middleNames
+	): string {
+		$lastName = $significantNames[0];
+		$firstName = $significantNames[1];
+
+		// move the first name to the end, so that it is reduced last
+		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$firstName]), $minimalReduction);
+		/** @var string[] $reduced */
+		/** @var int $reduction */
+		$tmp = array_pop($reduced);
+		array_unshift($reduced, $tmp);
+		if ($reduction >= $minimalReduction) {
+			// success, the actual length reduction is greater or equal to the targeted reduction
+			return $this->implode(array_merge($reduced, [$lastName]));
+		}
+
+		$attempt1 = $this->implode($reduced, '.', '') . ' ' . $lastName; // J.R.R. Tolkien
+		if (strlen($attempt1) <= $limit) {
+			return $attempt1;
+		}
+
+		// at this point we need to try these two and see which one to return
+		$attempt2 = $reduced[0] . '. ' . $lastName; // J. Tolkien (middle names omitted)
+		$attempt3 = $this->implode(array_merge($reduced, [$this->_initials([$lastName])]), '.', ''); // J.R.R.T. (initials only)
+		$l2 = strlen($attempt2);
+		$l3 = strlen($attempt3);
+
+		if ($l2 <= $limit && $l3 > $limit) {
+			return $attempt2;
+		}
+		if ($l3 <= $limit && $l2 > $limit) {
+			return $attempt3;
+		}
+		if ($l2 <= $limit && $l3 <= $limit) {
+			return $l2 >= $l3 ? $attempt2 : $attempt3;
+		}
+		throw new \LogicException('wtf'); // this should never happen
+	}
+
+
+	/**
+	 * @param string[] $significantNames
+	 * @param string[] $middleNames
+	 */
+	public function significantFirstName(
+		int $limit,
+		int $minimalReduction,
+		array $significantNames,
+		array $middleNames
+	): string {
+		$firstName = $significantNames[0];
+		$lastName = $significantNames[1];
+
+		// move the first name to the end, so that it is reduced last
+		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$lastName]), $minimalReduction);
+		/** @var string[] $reduced */
+		/** @var int $reduction */
+		if ($reduction >= $minimalReduction) {
+			// success, the actual length reduction is greater or equal to the targeted reduction
+			return $this->implode(array_merge([$firstName], $reduced));
+		}
+
+		$attempt1 = $firstName . ' ' . $this->implode($reduced, '.', ''); // John R.R.T.
+		if (strlen($attempt1) <= $limit) {
+			return $attempt1;
+		}
+
+		// at this point we need to try these two and see which one to return
+		$attempt2 = $firstName . ' ' . $reduced[count($reduced) - 1] . '.'; // John T. (middle names omitted)
+		$attempt3 = $this->implode(array_merge([$this->_initials([$firstName])], $reduced), '.', ''); // J.R.R.T. (initials only)
+		$l2 = strlen($attempt2);
+		$l3 = strlen($attempt3);
+
+		if ($l2 <= $limit && $l3 > $limit) {
+			return $attempt2;
+		}
+		if ($l3 <= $limit && $l2 > $limit) {
+			return $attempt3;
+		}
+		if ($l2 <= $limit && $l3 <= $limit) {
+			return $l2 >= $l3 ? $attempt2 : $attempt3;
+		}
+		throw new \LogicException('wtf'); // this should never happen
+	}
+
+
 	private function reduceFirst(string $full, int $limit): string
 	{
 		return $this->limitNameTo($full, $limit, fn (array $parts): array => [
@@ -156,100 +250,6 @@ final class Shorts
 
 		// fall back to using initials
 		return $this->limitInitials($parts, $limit);
-	}
-
-
-	/**
-	 * @param string[] $significantNames
-	 * @param string[] $middleNames
-	 */
-	private function significantLastName(
-		int $limit,
-		int $minimalReduction,
-		array $significantNames,
-		array $middleNames
-	): string {
-		$lastName = $significantNames[0];
-		$firstName = $significantNames[1];
-
-		// move the first name to the end, so that it is reduced last
-		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$firstName]), $minimalReduction);
-		/** @var string[] $reduced */
-		/** @var int $reduction */
-		$tmp = array_pop($reduced);
-		array_unshift($reduced, $tmp);
-		if ($reduction >= $minimalReduction) {
-			// success, the actual length reduction is greater or equal to the targeted reduction
-			return $this->implode(array_merge($reduced, [$lastName]));
-		}
-
-		$attempt1 = $this->implode($reduced, '.', '') . ' ' . $lastName; // J.R.R. Tolkien
-		if (strlen($attempt1) <= $limit) {
-			return $attempt1;
-		}
-
-		// at this point we need to try these two and see which one to return
-		$attempt2 = $reduced[0] . '. ' . $lastName; // J. Tolkien (middle names omitted)
-		$attempt3 = $this->implode(array_merge($reduced, [$this->_initials([$lastName])]), '.', ''); // J.R.R.T. (initials only)
-		$l2 = strlen($attempt2);
-		$l3 = strlen($attempt3);
-
-		if ($l2 <= $limit && $l3 > $limit) {
-			return $attempt2;
-		}
-		if ($l3 <= $limit && $l2 > $limit) {
-			return $attempt3;
-		}
-		if ($l2 <= $limit && $l3 <= $limit) {
-			return $l2 >= $l3 ? $attempt2 : $attempt3;
-		}
-		throw new \LogicException('wtf'); // this should never happen
-	}
-
-
-	/**
-	 * @param string[] $significantNames
-	 * @param string[] $middleNames
-	 */
-	private function significantFirstName(
-		int $limit,
-		int $minimalReduction,
-		array $significantNames,
-		array $middleNames
-	): string {
-		$firstName = $significantNames[0];
-		$lastName = $significantNames[1];
-
-		// move the first name to the end, so that it is reduced last
-		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$lastName]), $minimalReduction);
-		/** @var string[] $reduced */
-		/** @var int $reduction */
-		if ($reduction >= $minimalReduction) {
-			// success, the actual length reduction is greater or equal to the targeted reduction
-			return $this->implode(array_merge([$firstName], $reduced));
-		}
-
-		$attempt1 = $firstName . ' ' . $this->implode($reduced, '.', ''); // John R.R.T.
-		if (strlen($attempt1) <= $limit) {
-			return $attempt1;
-		}
-
-		// at this point we need to try these two and see which one to return
-		$attempt2 = $firstName . ' ' . $reduced[count($reduced) - 1] . '.'; // John T. (middle names omitted)
-		$attempt3 = $this->implode(array_merge([$this->_initials([$firstName])], $reduced), '.', ''); // J.R.R.T. (initials only)
-		$l2 = strlen($attempt2);
-		$l3 = strlen($attempt3);
-
-		if ($l2 <= $limit && $l3 > $limit) {
-			return $attempt2;
-		}
-		if ($l3 <= $limit && $l2 > $limit) {
-			return $attempt3;
-		}
-		if ($l2 <= $limit && $l3 <= $limit) {
-			return $l2 >= $l3 ? $attempt2 : $attempt3;
-		}
-		throw new \LogicException('wtf'); // this should never happen
 	}
 
 

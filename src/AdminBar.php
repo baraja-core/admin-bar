@@ -17,7 +17,7 @@ final class AdminBar
 	public const MODE_AUTODETECT = null;
 
 	/** @var int size of reserved memory */
-	public static int $reservedMemorySize = 500000;
+	public static int $reservedMemorySize = 500_000;
 
 	private static bool $enabled = false;
 
@@ -97,6 +97,12 @@ final class AdminBar
 	}
 
 
+	public static function isReserved(): bool
+	{
+		return self::$reserved !== null;
+	}
+
+
 	/**
 	 * @internal
 	 */
@@ -128,9 +134,18 @@ final class AdminBar
 			return $left > $b->getPriority() ? 1 : -1;
 		});
 
-		ob_start(static function () {});
+		ob_start(static function () {
+		});
 		try {
-			[$basePath, $user, $panels, $menuLinks] = [Url::get()->getBaseUrl(), self::$user, self::$panels, self::$menuLinks];
+			$args = [
+				'$basePath' => Url::get()->getBaseUrl(),
+				'$user' => self::$user,
+				'$panels' => self::$panels,
+				'$menuLinks' => self::$menuLinks,
+			];
+
+			extract($args, EXTR_OVERWRITE);
+
 			require __DIR__ . '/assets/content.phtml';
 
 			$return = ob_get_clean();
