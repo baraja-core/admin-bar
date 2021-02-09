@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
+use JetBrains\PhpStorm\Pure;
+
 final class Helpers
 {
+	#[Pure]
 	public static function escapeHtml(string $s): string
 	{
 		return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
