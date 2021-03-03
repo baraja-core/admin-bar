@@ -11,15 +11,10 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
-	private Localization $localization;
-
-	private User $user;
-
-
-	public function __construct(Localization $localization, User $user)
-	{
-		$this->localization = $localization;
-		$this->user = $user;
+	public function __construct(
+		private Localization $localization,
+		private User $user,
+	) {
 	}
 
 

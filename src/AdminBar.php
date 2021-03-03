@@ -10,11 +10,10 @@ use Nette\Utils\FileSystem;
 
 final class AdminBar
 {
-	public const MODE_ENABLED = true;
-
-	public const MODE_DISABLED = false;
-
-	public const MODE_AUTODETECT = null;
+	public const
+		MODE_ENABLED = true,
+		MODE_DISABLED = false,
+		MODE_AUTODETECT = null;
 
 	/** @var int size of reserved memory */
 	public static int $reservedMemorySize = 500_000;
