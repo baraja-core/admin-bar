@@ -199,7 +199,7 @@ final class Shorts
 
 	private function reduceFirst(string $full, int $limit): string
 	{
-		return $this->limitNameTo($full, $limit, fn (array $parts): array => [
+		return $this->limitNameTo($full, $limit, fn(array $parts): array => [
 			$parts[count($parts) - 1], // last name
 			$parts[0], // fist name
 		], [$this, 'significantLastName']);
@@ -208,7 +208,7 @@ final class Shorts
 
 	private function reduceLast(string $full, int $limit): string
 	{
-		return $this->limitNameTo($full, $limit, fn (array $parts): array => [
+		return $this->limitNameTo($full, $limit, fn(array $parts): array => [
 			$parts[0], // fist name
 			$parts[count($parts) - 1], // last name
 		], [$this, 'significantFirstName']);
@@ -288,7 +288,7 @@ final class Shorts
 		$parts = $this->explode($full);
 		$first = array_shift($parts);
 
-		return $this->implode(array_merge([$first], array_map(fn (string $p): string => $p[0], $parts)), $suffix, $glue);
+		return $this->implode(array_merge([$first], array_map(fn(string $p): string => $p[0], $parts)), $suffix, $glue);
 	}
 
 
@@ -305,7 +305,7 @@ final class Shorts
 		}
 		$parts = $this->explode($full);
 
-		return $this->implode(array_merge(array_map(fn (string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
+		return $this->implode(array_merge(array_map(fn(string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
 	}
 
 
@@ -314,7 +314,7 @@ final class Shorts
 	 */
 	private function _initials(array $parts, string $suffix = '', string $glue = ''): string
 	{
-		return $this->implode(array_map(fn (string $p): string => $p[0], $parts), $suffix, $glue);
+		return $this->implode(array_map(fn(string $p): string => $p[0], $parts), $suffix, $glue);
 	}
 
 
@@ -349,7 +349,7 @@ final class Shorts
 	private function explode(string $input): array
 	{
 		/** @phpstan-ignore-next-line */
-		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn (string $s): bool => $s !== ''));
+		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn(string $s): bool => $s !== ''));
 	}
 
 
@@ -363,6 +363,6 @@ final class Shorts
 	 */
 	private function implode(array $parts, string $suffix = '.', string $glue = ' '): string
 	{
-		return implode($glue, array_map(static fn (?string $p): string => $p . (strlen((string) $p) === 1 ? $suffix : ''), $parts));
+		return implode($glue, array_map(static fn(?string $p): string => $p . (strlen((string) $p) === 1 ? $suffix : ''), $parts));
 	}
 }
