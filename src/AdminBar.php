@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
-use Baraja\Url\Url;
-use Nette\Utils\FileSystem;
+use Baraja\AdminBar\User\AdminIdentity;
+use Nette\Security\User;
+use Tracy\Debugger;
+use Tracy\ILogger;
 
 final class AdminBar
 {
@@ -23,16 +25,9 @@ final class AdminBar
 	/** @var string|null reserved memory; also prevents double rendering */
 	private static ?string $reserved = null;
 
-	private static ?User $user = null;
+	private static ?Bar $bar = null;
 
-	/** @var Panel[] */
-	private static array $panels = [];
-
-	/** @var true[] (type => true) */
-	private static array $panelTypes = [];
-
-	/** @var MenuLink[]|null[] */
-	private static array $menuLinks = [];
+	private static ?User $netteUser = null;
 
 
 	/**
@@ -40,24 +35,36 @@ final class AdminBar
 	 */
 	public static function enable(?bool $enabled = self::MODE_AUTODETECT): void
 	{
-		if (PHP_SAPI === 'cli') { // cli mode
-			$enabled = false;
+		if (
+			PHP_SAPI === 'cli' // cli mode
+			|| ( // ajax request
+				isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+				&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+			)
+		) {
+			$enabled = self::MODE_DISABLED;
 		}
 		if (
-			isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-			&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
-		) { // ajax request
-			$enabled = false;
+			$enabled === self::MODE_AUTODETECT
+			&& self::$netteUser !== null
+			&& self::$netteUser->isLoggedIn()
+			&& self::$netteUser->getIdentity() instanceof AdminIdentity
+		) {
+			$enabled = self::MODE_ENABLED;
 		}
-		if (Helpers::isHtmlMode() === false) { // render only to HTML
-			$enabled = false;
-		}
-		if ((self::$enabled = $enabled === true) === self::MODE_DISABLED) {
+		self::$enabled = $enabled === true;
+		if (self::$enabled === self::MODE_DISABLED) {
 			return;
 		}
 
 		self::$reserved = str_repeat('b', self::$reservedMemorySize);
 		register_shutdown_function([self::class, 'shutdownHandler']);
+	}
+
+
+	public static function getBar(): Bar
+	{
+		return self::$bar ?? self::$bar = new Bar;
 	}
 
 
@@ -67,38 +74,21 @@ final class AdminBar
 	}
 
 
-	public static function addPanel(Panel $panel): void
-	{
-		if (isset(self::$panelTypes[$type = \get_class($panel)]) === true) {
-			throw new \InvalidArgumentException('Panel "' . $type . '" is already registered. Did you use circular reference?');
-		}
-
-		self::$panelTypes[$type] = true;
-		self::$panels[] = $panel;
-	}
-
-
-	public static function addLink(string $label, string $url): void
-	{
-		self::$menuLinks[] = new MenuLink($label, $url);
-	}
-
-
-	public static function addSeparator(): void
-	{
-		self::$menuLinks[] = null;
-	}
-
-
-	public static function setUser(User $user): void
-	{
-		self::$user = $user;
-	}
-
-
 	public static function isReserved(): bool
 	{
 		return self::$reserved !== null;
+	}
+
+
+	public static function setNetteUser(User $user): void
+	{
+		self::$netteUser = $user;
+	}
+
+
+	public static function getNetteUser(): ?User
+	{
+		return self::$netteUser;
 	}
 
 
@@ -107,53 +97,18 @@ final class AdminBar
 	 */
 	public static function shutdownHandler(): void
 	{
-		self::$reserved = null;
-		if (self::$enabled === self::MODE_DISABLED) {
+		if (self::$reserved === null || self::$enabled === self::MODE_DISABLED || Helpers::isHtmlMode() === false) {
 			return;
 		}
+		self::$reserved = null;
 
 		try {
-			echo self::render();
+			self::getBar()->render();
 		} catch (\Throwable $e) {
+			if (class_exists(Debugger::class)) {
+				Debugger::log($e, ILogger::EXCEPTION);
+			}
 			echo 'Can not render admin bar.';
 		}
-	}
-
-
-	/**
-	 * @throws \Throwable
-	 */
-	private static function render(): string
-	{
-		usort(self::$panels, static function (Panel $a, Panel $b): int {
-			if (($left = $a->getPriority()) < 0 || $left > 100) {
-				throw new \LogicException('Priority must be in interval (0; 100), but "' . $left . '" given.');
-			}
-
-			return $left > $b->getPriority() ? 1 : -1;
-		});
-
-		ob_start(static function () {
-		});
-		try {
-			$args = [
-				'basePath' => Url::get()->getBaseUrl(),
-				'user' => self::$user,
-				'panels' => self::$panels,
-				'menuLinks' => self::$menuLinks,
-			];
-
-			/** @phpstan-ignore-next-line */
-			extract($args, EXTR_OVERWRITE);
-
-			require __DIR__ . '/assets/content.phtml';
-
-			$return = ob_get_clean();
-		} catch (\Throwable $e) {
-			ob_end_clean();
-			throw $e;
-		}
-
-		return $return . '<style>' . Helpers::minifyHtml(FileSystem::read(__DIR__ . '/assets/style.css')) . '</style>';
 	}
 }

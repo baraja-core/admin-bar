@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Baraja\AdminBar;
 
+
+use Baraja\AdminBar\Menu\MenuLink;
+use Baraja\AdminBar\Panel\Panel;
+use Baraja\AdminBar\User\User;
+
 /**
- * @var MenuLink[]|null[] $menuLinks
+ * @var array<string, array<int, MenuLink|null>> $menuLinks
  * @var string $basePath
  * @var User|null $user
  * @var Panel[] $panels
+ * @var bool $debugMode
  */
 
 ?>
-<div id="admin-bar-container">
+<div id="admin-bar-container"<?= $debugMode ? ' class="admin-bar-container-debugMode"' : '' ?>>
 	<table>
 		<tr>
 			<td id="admin-bar-logo" role="banner">
@@ -52,7 +58,7 @@ namespace Baraja\AdminBar;
 							<span class="admin-bar-identity text-nowrap">
 							<?php
 							echo Helpers::escapeHtml($user !== null ? ($user->getName() ?? 'Guest') : 'Guest');
-							echo ($user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '')
+							echo ($user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '');
 							?>
 							</span>
 						</td>
@@ -66,13 +72,19 @@ namespace Baraja\AdminBar;
 					echo '<hr class="w-100 my-2">';
 				}
 
-				foreach ($menuLinks as $menuLink) {
-					if ($menuLink === null) {
-						echo '<hr class="w-100 my-2">';
-					} else {
-						echo '<li class="text-left">';
-						echo '<a href="' . $menuLink->getUrl() . '" class="ml-2">' . Helpers::escapeHtml($menuLink->getLabel()) . '</a>';
-						echo '</li>';
+				$menuLinksIterator = 0;
+				foreach ($menuLinks as $menuLinkGroup) {
+					if ($menuLinksIterator++ > 0) {
+			 			echo '<hr class="w-100 my-2">';
+					}
+					foreach ($menuLinkGroup as $menuLink) {
+						if ($menuLink === null) {
+							echo '<hr class="w-100 my-2">';
+						} else {
+							echo '<li class="text-left">';
+							echo '<a href="' . $menuLink->getUrl() . '" class="ml-2">' . Helpers::escapeHtml($menuLink->getLabel()) . '</a>';
+							echo '</li>';
+						}
 					}
 				}
 				?>

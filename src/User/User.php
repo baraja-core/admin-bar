@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Baraja\AdminBar;
+namespace Baraja\AdminBar\User;
 
 
 interface User

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Baraja\AdminBar;
+namespace Baraja\AdminBar\Menu;
 
 
 use Nette\Utils\Strings;
