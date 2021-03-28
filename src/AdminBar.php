@@ -6,6 +6,7 @@ namespace Baraja\AdminBar;
 
 
 use Baraja\AdminBar\User\AdminIdentity;
+use Baraja\Url\Url;
 use Nette\Security\User;
 use Tracy\Debugger;
 use Tracy\ILogger;
@@ -40,6 +41,10 @@ final class AdminBar
 			|| ( // ajax request
 				isset($_SERVER['HTTP_X_REQUESTED_WITH'])
 				&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+			)
+			|| ( // api request
+				class_exists(Url::class)
+				&& str_starts_with(Url::get()->getUrlScript()->getPathInfo(), 'api/')
 			)
 		) {
 			$enabled = self::MODE_DISABLED;
