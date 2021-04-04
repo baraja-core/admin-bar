@@ -323,7 +323,8 @@ final class Shorts
 	 */
 	private function limitInitials(array $parts, int $limit): string
 	{
-		if ($limit < ($num = count($parts))) { // special case first
+		$num = count($parts);
+		if ($limit < $num) { // special case first
 			if ($limit === 1) {
 				return $this->_initials([ // return the first letter of the last name only
 					$parts[$num - 1],
