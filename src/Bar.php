@@ -62,7 +62,8 @@ final class Bar
 	public function render(): void
 	{
 		usort($this->panels, static function (Panel $a, Panel $b): int {
-			if (($left = $a->getPriority()) < 0 || $left > 100) {
+			$left = $a->getPriority();
+			if ($left < 0 || $left > 100) {
 				throw new \LogicException('Priority must be in interval (0; 100), but "' . $left . '" given.');
 			}
 
