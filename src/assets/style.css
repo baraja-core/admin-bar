@@ -195,6 +195,12 @@
 	box-shadow: 0 0 0 0.2rem rgba(66, 67, 71, 0.57);
 }
 
+#admin-bar-container .btn-danger {
+	color: #fff !important;
+	background-color: #b71c1c !important;
+	border-color: #b71c1c !important;
+}
+
 #admin-bar-container .btn:hover {
 	background: #141414;
 }
