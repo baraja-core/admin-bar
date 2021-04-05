@@ -7,6 +7,7 @@ namespace Baraja\AdminBar;
 
 use Baraja\AdminBar\Menu\MenuLink;
 use Baraja\AdminBar\Panel\Panel;
+use Baraja\AdminBar\Plugin\Plugin;
 use Baraja\AdminBar\User\User;
 
 /**
@@ -14,7 +15,9 @@ use Baraja\AdminBar\User\User;
  * @var string $basePath
  * @var User|null $user
  * @var Panel[] $panels
+ * @var Plugin[] $plugins
  * @var bool $debugMode
+ * @var bool $enableVue
  */
 
 ?>
@@ -28,19 +31,21 @@ use Baraja\AdminBar\User\User;
 				<ul class="admin-bar-tab-area">
 					<?php
 					foreach ($panels as $panel) {
-						echo '<li class="admin-bar-tab">' . $panel->getTab() . '</li>';
+						echo '<li class="admin-bar-tab">';
+						echo $panel->getTab();
+						echo '</li>';
 					}
 					?>
 				</ul>
 			</td>
-			<td class="admin-bar-panel" width="85" onclick="window.open('https://help.baraja.cz', '_blank')">
-				<table>
-					<tr>
-						<td style="width:40px;text-align:right"><?= Helpers::iconHelp() ?></td>
-						<td class="admin-bar-panel__label">Help</td>
-					</tr>
-				</table>
-			</td>
+			<td style="width:100%"></td>
+			<?php
+			foreach ($plugins as $plugin) {
+				echo '<td class="admin-bar-panel">';
+				echo $plugin->render();
+				echo '</td>';
+			}
+			?>
 			<td class="admin-bar-panel admin-bar-user" role="navigation">
 				<table>
 					<tr>
@@ -93,3 +98,7 @@ use Baraja\AdminBar\User\User;
 		</tr>
 	</table>
 </div>
+<?php
+if ($enableVue) {
+	echo '<script>new Vue({el: \'#admin-bar-container\'});</script>';
+}

@@ -7,6 +7,7 @@ namespace Baraja\AdminBar;
 
 use Baraja\AdminBar\Menu\Menu;
 use Baraja\AdminBar\Panel\Panel;
+use Baraja\AdminBar\Plugin\Plugin;
 use Baraja\AdminBar\User\User;
 use Baraja\Url\Url;
 use Nette\Utils\FileSystem;
@@ -20,7 +21,12 @@ final class Bar
 	/** @var Panel[] */
 	private array $panels = [];
 
+	/** @var Plugin[] */
+	private array $plugins = [];
+
 	private bool $debugMode;
+
+	private bool $enableVue = false;
 
 
 	public function __construct()
@@ -39,6 +45,14 @@ final class Bar
 			} while (isset($this->panels[$id]));
 		}
 		$this->panels[$id] = $panel;
+
+		return $this;
+	}
+
+
+	public function addPlugin(Plugin $plugin): self
+	{
+		$this->plugins[] = $plugin;
 
 		return $this;
 	}
@@ -77,8 +91,10 @@ final class Bar
 				'basePath' => Url::get()->getBaseUrl(),
 				'user' => $this->user,
 				'panels' => $this->panels,
+				'plugins' => $this->plugins,
 				'menuLinks' => $this->menu->getItems(),
 				'debugMode' => $this->debugMode,
+				'enableVue' => $this->enableVue,
 			];
 
 			/** @phpstan-ignore-next-line */
@@ -123,5 +139,17 @@ final class Bar
 	public function setDebugMode(bool $debugMode): void
 	{
 		$this->debugMode = $debugMode;
+	}
+
+
+	public function isEnableVue(): bool
+	{
+		return $this->enableVue;
+	}
+
+
+	public function setEnableVue(bool $enableVue = true): void
+	{
+		$this->enableVue = $enableVue;
 	}
 }

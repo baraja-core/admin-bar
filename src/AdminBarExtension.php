@@ -6,6 +6,7 @@ namespace Baraja\AdminBar;
 
 
 use Baraja\AdminBar\Panel\BasicPanel;
+use Baraja\AdminBar\Plugin\HelpPlugin;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
@@ -42,6 +43,7 @@ final class AdminBarExtension extends CompilerExtension
 			. '(function () {' . "\n"
 			. "\t" . AdminBar::class . '::setNetteUser($this->getService(?));' . "\n"
 			. "\t" . AdminBar::class . '::getBar()->addPanel($this->getService(?));' . "\n"
+			. "\t" . AdminBar::class . '::getBar()->addPlugin(new ' . HelpPlugin::class . ');' . "\n"
 			. "\t" . AdminBar::class . '::enable();' . "\n"
 			. '})();',
 			[

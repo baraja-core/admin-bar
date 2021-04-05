@@ -50,15 +50,11 @@
 
 #admin-bar-container .admin-bar-panel table {
 	width: 100% !important;
-	cursor: pointer;
-}
-
-#admin-bar-container .admin-bar-panel:hover {
-	background: #555;
 }
 
 #admin-bar-container .admin-bar-panel__label {
 	color: white !important;
+	min-width: 110px !important;
 }
 
 #admin-bar-container .admin-bar-panel svg {
@@ -67,10 +63,12 @@
 
 #admin-bar-container .admin-bar-user {
 	position: relative;
-	width: 180px !important;
+	min-width: 180px !important;
+	cursor: pointer;
 }
 
 #admin-bar-container .admin-bar-user:hover {
+	background: #555;
 	color: #6c757d !important;
 }
 
@@ -163,6 +161,16 @@
 	transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 
+#admin-bar-container input {
+	width: 100% !important;
+	border: 0 !important;
+	font-size: 12pt;
+	padding: 4px 6px !important;
+	margin: 0 !important;
+	color: #eee !important;
+	background: #33373b !important;
+}
+
 #admin-bar-container .btn {
 	display: inline-block;
 	font-weight: normal;
@@ -240,7 +248,7 @@
 }
 
 #admin-bar-container #admin-bar-logo {
-	width: 5em !important;
+	min-width: 5em !important;
 	text-align: center !important;
 }
 
