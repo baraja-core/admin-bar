@@ -41,7 +41,7 @@ final class Bar
 		if ($id === null) {
 			$c = 0;
 			do {
-				$id = get_class($panel) . ($c++ ? '-' . $c : '');
+				$id = $panel::class . ($c++ ? '-' . $c : '');
 			} while (isset($this->panels[$id]));
 		}
 		$this->panels[$id] = $panel;
