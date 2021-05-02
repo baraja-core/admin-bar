@@ -16,7 +16,7 @@ final class AdminIdentity extends SimpleIdentity
 
 
 	public function __construct(
-		string $id,
+		int|string $id,
 		?array $roles = null,
 		?iterable $data = null,
 		?string $name = null,
