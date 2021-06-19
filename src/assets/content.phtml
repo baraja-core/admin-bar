@@ -53,7 +53,7 @@ use Baraja\AdminBar\User\User;
 						<td style="width:40px;text-align:right">
 						<?php
 							if (($avatarUrl = $user !== null ? $user->getAvatarUrl() : null) !== null) {
-								echo '<img src="' . $avatarUrl . '" alt="Avatar" style="max-width:32px !important;max-height:32px !important;margin:0 8px !important">';
+								echo '<img src="' . $avatarUrl . '" alt="Avatar" style="max-width:32px !important;max-height:32px !important;margin:0 8px !important;image-rendering:crisp-edges">';
 							} else {
 								echo Helpers::iconUser();
 							}
