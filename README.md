@@ -7,14 +7,20 @@ AdminBar is an interactive tool for quick navigation between the website, the CM
 
 ![Default theme](doc/default-theme.png)
 
-Installation
-------------
+📦 Installation
+---------------
 
-Simply composer:
+It's best to use [Composer](https://getcomposer.org) for installation, and you can also find the package on
+[Packagist](https://packagist.org/packages/baraja-core/admin-bar) and
+[GitHub](https://github.com/baraja-core/admin-bar).
+
+To install, simply use the command:
 
 ```
 $ composer require baraja-core/admin-bar
 ```
+
+You can use the package manually by creating an instance of the internal classes, or register a DIC extension to link the services directly to the Nette Framework.
 
 AdminBar will adapt to what you are doing
 -----------------------------------------
