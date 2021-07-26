@@ -13,7 +13,11 @@ final class Menu
 
 	public function addLink(string $label, string $url, ?string $group = null): void
 	{
-		$this->items[$this->registerGroup($group)][] = new MenuLink($label, $url);
+		try {
+			$this->items[$this->registerGroup($group)][] = new MenuLink($label, $url);
+		} catch (\InvalidArgumentException $e) {
+			trigger_error(__METHOD__ . ': ' . $e->getMessage());
+		}
 	}
 
 
