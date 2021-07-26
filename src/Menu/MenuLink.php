@@ -17,8 +17,12 @@ final class MenuLink
 
 	public function __construct(string $label, string $url)
 	{
+		$url = trim((string) preg_replace('/\s+/', '', $url));
 		if (Validators::isUrl($url) === false) {
-			throw new \InvalidArgumentException('URL is not valid, because "' . $url . '" given.');
+			throw new \InvalidArgumentException(
+				'URL is not valid, because "' . $url . '" '
+				. '(length: ' . strlen($url) . ' bytes, base64: "' . base64_encode($url) . '") given.',
+			);
 		}
 
 		$this->label = Strings::firstUpper($label);
