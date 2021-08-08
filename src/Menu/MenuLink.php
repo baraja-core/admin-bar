@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Baraja\AdminBar\Menu;
 
 
+use Baraja\AdminBar\Helpers;
 use Nette\Utils\Strings;
 use Nette\Utils\Validators;
 
-final class MenuLink
+final class MenuLink extends MenuItem
 {
 	private string $label;
 
@@ -27,6 +28,12 @@ final class MenuLink
 
 		$this->label = Strings::firstUpper($label);
 		$this->url = $url;
+	}
+
+
+	public function render(): string
+	{
+		return '<a href="' . $this->getUrl() . '">' . Helpers::escapeHtml($this->getLabel()) . '</a>';
 	}
 
 

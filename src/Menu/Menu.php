@@ -7,14 +7,26 @@ namespace Baraja\AdminBar\Menu;
 
 final class Menu
 {
-	/** @var array<string, array<int, MenuLink|null>> */
+	/** @var array<string, array<int, MenuItem|null>> */
 	private array $items = [];
 
 
 	public function addLink(string $label, string $url, ?string $group = null): void
 	{
+		$this->addItem(new MenuLink($label, $url), $group);
+	}
+
+
+	public function addEvent(string $label, string $event, ?string $group = null): void
+	{
+		$this->addItem(new MenuEvent($label, $event), $group);
+	}
+
+
+	public function addItem(MenuItem $item, ?string $group = null): void
+	{
 		try {
-			$this->items[$this->registerGroup($group)][] = new MenuLink($label, $url);
+			$this->items[$this->registerGroup($group)][] = $item;
 		} catch (\InvalidArgumentException $e) {
 			trigger_error(__METHOD__ . ': ' . $e->getMessage());
 		}
@@ -28,7 +40,7 @@ final class Menu
 
 
 	/**
-	 * @return array<string, array<int, MenuLink|null>>
+	 * @return array<string, array<int, MenuItem|null>>
 	 */
 	public function getItems(): array
 	{

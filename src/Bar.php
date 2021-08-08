@@ -92,7 +92,7 @@ final class Bar
 				'user' => $this->user,
 				'panels' => $this->panels,
 				'plugins' => $this->plugins,
-				'menuLinks' => $this->menu->getItems(),
+				'menuItems' => $this->menu->getItems(),
 				'debugMode' => $this->debugMode,
 				'enableVue' => $this->enableVue,
 			];

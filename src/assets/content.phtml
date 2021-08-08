@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
-use Baraja\AdminBar\Menu\MenuLink;
+use Baraja\AdminBar\Menu\MenuItem;
 use Baraja\AdminBar\Panel\Panel;
 use Baraja\AdminBar\Plugin\Plugin;
 use Baraja\AdminBar\User\User;
 
 /**
- * @var array<string, array<int, MenuLink|null>> $menuLinks
+ * @var array<string, array<int, MenuItem|null>> $menuItems
  * @var string $basePath
  * @var User|null $user
  * @var Panel[] $panels
@@ -77,17 +77,17 @@ use Baraja\AdminBar\User\User;
 					echo '<hr class="w-100 my-2">';
 				}
 
-				$menuLinksIterator = 0;
-				foreach ($menuLinks as $menuLinkGroup) {
-					if ($menuLinksIterator++ > 0) {
+				$menuItemsIterator = 0;
+				foreach ($menuItems as $menuItemGroup) {
+					if ($menuItemsIterator++ > 0) {
 			 			echo '<hr class="w-100 my-2">';
 					}
-					foreach ($menuLinkGroup as $menuLink) {
-						if ($menuLink === null) {
+					foreach ($menuItemGroup as $menuItem) {
+						if ($menuItem === null) {
 							echo '<hr class="w-100 my-2">';
 						} else {
 							echo '<li class="text-left">';
-							echo '<a href="' . $menuLink->getUrl() . '" class="ml-2">' . Helpers::escapeHtml($menuLink->getLabel()) . '</a>';
+							echo '<div class="ml-2">' . $menuItem->render() . '</div>';
 							echo '</li>';
 						}
 					}
