@@ -32,3 +32,7 @@ The bar provides a simple API for developers to easily influence what the user s
 You can also register custom micro-applications directly inside panel, such as full-text search across the entire system, or direct user profile management.
 
 ![Default theme](doc/search-module.png)
+
+Creating a web template
+-----------------------------------------
+Navigation bars positioned at the top of the page, may not include CSS top property because of the proper display of the AdminBar.
