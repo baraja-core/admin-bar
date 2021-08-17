@@ -1,5 +1,5 @@
 body {
-	margin-top: 45px!important;
+	margin-top: 45px !important;
 }
 
 #admin-bar-container {
@@ -268,11 +268,7 @@ body {
 #admin-bar-container #admin-bar-logo {
 	min-width: 5em !important;
 	text-align: center !important;
-}
-
-#admin-bar-container #admin-bar-logo span {
-	color: white !important;
-	padding: 0 .5em !important;
+	font-family: monospace;
 }
 
 @media (max-width: 767px) {
