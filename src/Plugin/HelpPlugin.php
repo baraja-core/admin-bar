@@ -11,7 +11,7 @@ final class HelpPlugin implements Plugin
 {
 	public function render(): string
 	{
-		return '<a href="https://help.baraja.cz" target="_blank">
+		return '<a href="https://brj.cz/help" target="_blank">
 			<table style="max-width:95px !important">
 				<tr>
 					<td style="width:40px;text-align:right">' . Helpers::iconHelp() . '</td>
