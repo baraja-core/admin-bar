@@ -20,13 +20,13 @@ final class AdminIdentity extends SimpleIdentity
 		?array $roles = null,
 		?iterable $data = null,
 		?string $name = null,
-		?string $avatarUrl = null
+		?string $avatarUrl = null,
 	) {
 		parent::__construct($id, $roles, $data);
 		$this->name = $name;
 		if ($avatarUrl !== null) {
 			if (Validators::isUrl($avatarUrl) === false) {
-				throw new \InvalidArgumentException('Avatar URL is not valid URL, because "' . $avatarUrl . '" given.');
+				throw new \InvalidArgumentException(sprintf('Avatar URL is not valid URL, because "%s" given.', $avatarUrl));
 			}
 			$this->avatarUrl = $avatarUrl;
 		}
