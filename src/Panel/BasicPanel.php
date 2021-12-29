@@ -24,17 +24,18 @@ final class BasicPanel implements Panel
 		$default = $this->localization->getDefaultLocale();
 		$current = $this->localization->getLocale() ?? $default;
 		$baseUrl = Url::get()->getBaseUrl();
+		$localeParam = $default !== $current ? '?locale=' . $current : '';
 
 		$buttons = [];
-		$buttons[] = '<a href="' . $baseUrl . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Home</a>';
-		$buttons[] = '<a href="' . $baseUrl . '/admin' . ($default !== $current ? '?locale=' . $current : '') . '" class="btn btn-primary">Admin</a>';
+		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Home</a>', $baseUrl . $localeParam);
+		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', $baseUrl . '/admin' . $localeParam);
 
 		$apiDoc = $this->processApiDocumentation($baseUrl);
 		if ($apiDoc !== null) {
 			$buttons[] = $apiDoc;
 		}
 		if (AdminBar::getBar()->isDebugMode()) {
-			$buttons[] = '<a href="' . $this->getUrlWithoutDebugMode() . '" class="btn btn-danger">Cancel Debug mode</a>';
+			$buttons[] = sprintf('<a href="%s" class="btn btn-danger">Cancel Debug mode</a>', $this->getUrlWithoutDebugMode());
 		}
 
 		return implode('&nbsp;&nbsp;&nbsp;', $buttons);
@@ -69,7 +70,7 @@ final class BasicPanel implements Panel
 			return null;
 		}
 
-		return '<a href="' . $baseUrl . '/api-documentation" class="btn btn-primary" target="_blank">API&nbsp;Doc</a>';
+		return sprintf('<a href="%s" class="btn btn-primary" target="_blank">API&nbsp;Doc</a>', $baseUrl . '/api-documentation');
 	}
 
 
