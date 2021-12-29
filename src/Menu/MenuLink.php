@@ -21,8 +21,11 @@ final class MenuLink extends MenuItem
 		$url = trim((string) preg_replace('/\s+/', '', $url));
 		if (Validators::isUrl($url) === false) {
 			throw new \InvalidArgumentException(
-				'URL is not valid, because "' . $url . '" '
-				. '(length: ' . strlen($url) . ' bytes, base64: "' . base64_encode($url) . '") given.',
+				sprintf('URL is not valid, because "%s" (length: %d bytes, base64: "%s") given.',
+					$url,
+					strlen($url),
+					base64_encode($url),
+				),
 			);
 		}
 
@@ -33,7 +36,7 @@ final class MenuLink extends MenuItem
 
 	public function render(): string
 	{
-		return '<a href="' . $this->getUrl() . '">' . Helpers::escapeHtml($this->getLabel()) . '</a>';
+		return sprintf('<a href="%s">%s</a>', $this->getUrl(), Helpers::escapeHtml($this->getLabel()));
 	}
 
 
