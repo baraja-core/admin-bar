@@ -80,7 +80,7 @@ final class Shorts
 			return $this->reduceFirst($fullName, $limit);
 		}
 
-		throw new \InvalidArgumentException('Strategy "' . $strategy . '" is not supported.');
+		throw new \InvalidArgumentException(sprintf('Strategy "%s" is not supported.', $strategy));
 	}
 
 
@@ -99,7 +99,7 @@ final class Shorts
 			return $this->keepLast($fullName);
 		}
 
-		throw new \InvalidArgumentException('Priority "' . $priority . '" is not supported.');
+		throw new \InvalidArgumentException(sprintf('Priority "%s" is not supported.', $priority));
 	}
 
 
@@ -111,15 +111,13 @@ final class Shorts
 		int $limit,
 		int $minimalReduction,
 		array $significantNames,
-		array $middleNames
+		array $middleNames,
 	): string {
 		$lastName = $significantNames[0];
 		$firstName = $significantNames[1];
 
 		// move the first name to the end, so that it is reduced last
 		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$firstName]), $minimalReduction);
-		/** @var string[] $reduced */
-		/** @var int $reduction */
 		$tmp = array_pop($reduced);
 		array_unshift($reduced, $tmp);
 		if ($reduction >= $minimalReduction) {
@@ -159,15 +157,13 @@ final class Shorts
 		int $limit,
 		int $minimalReduction,
 		array $significantNames,
-		array $middleNames
+		array $middleNames,
 	): string {
 		$firstName = $significantNames[0];
 		$lastName = $significantNames[1];
 
 		// move the first name to the end, so that it is reduced last
 		[$reduced, $reduction] = $this->reduceParts(array_merge($middleNames, [$lastName]), $minimalReduction);
-		/** @var string[] $reduced */
-		/** @var int $reduction */
 		if ($reduction >= $minimalReduction) {
 			// success, the actual length reduction is greater or equal to the targeted reduction
 			return $this->implode(array_merge([$firstName], $reduced));
@@ -230,7 +226,7 @@ final class Shorts
 		$parts = $this->explode($full);
 		$num = count($parts);
 
-		$significantNames = call_user_func($significant, $parts);
+		$significantNames = $significant($parts);
 		$mostSignificantNameLength = strlen($significantNames[0]);
 
 		if (
@@ -242,7 +238,7 @@ final class Shorts
 			$middleNames = array_slice($parts, 1, -1);
 			$target = $len - $limit; // this is the targeted minimum reduction needed for the shortener to be successful
 
-			$candidate = call_user_func($subroutine, $limit, $target, $significantNames, $middleNames);
+			$candidate = $subroutine($limit, $target, $significantNames, $middleNames);
 			if ($candidate !== null) {
 				return $candidate;
 			}
@@ -254,8 +250,8 @@ final class Shorts
 
 
 	/**
-	 * @param string[] $parts
-	 * @return string[][]|int[]
+	 * @param array<int, string> $parts
+	 * @return array{0: array<int, string>, 1: int}
 	 */
 	private function reduceParts(array $parts, int $minimalReduction): array
 	{
@@ -288,7 +284,14 @@ final class Shorts
 		$parts = $this->explode($full);
 		$first = array_shift($parts);
 
-		return $this->implode(array_merge([$first], array_map(fn(string $p): string => $p[0], $parts)), $suffix, $glue);
+		return $this->implode(
+			array_merge(
+				[$first],
+				array_map(static fn(string $p): string => $p[0], $parts),
+			),
+			$suffix,
+			$glue,
+		);
 	}
 
 
@@ -305,21 +308,28 @@ final class Shorts
 		}
 		$parts = $this->explode($full);
 
-		return $this->implode(array_merge(array_map(fn(string $p): string => $p[0], $parts), [array_pop($parts)]), $suffix, $glue);
+		return $this->implode(
+			array_merge(
+				array_map(static fn(string $p): string => $p[0], $parts),
+				[array_pop($parts)],
+			),
+			$suffix,
+			$glue,
+		);
 	}
 
 
 	/**
-	 * @param string[] $parts
+	 * @param array<int, string> $parts
 	 */
 	private function _initials(array $parts, string $suffix = '', string $glue = ''): string
 	{
-		return $this->implode(array_map(fn(string $p): string => $p[0], $parts), $suffix, $glue);
+		return $this->implode(array_map(static fn(string $p): string => $p[0], $parts), $suffix, $glue);
 	}
 
 
 	/**
-	 * @param string[] $parts
+	 * @param array<int, string> $parts
 	 */
 	private function limitInitials(array $parts, int $limit): string
 	{
@@ -345,12 +355,12 @@ final class Shorts
 	/**
 	 * Explode the name into parts.
 	 *
-	 * @return string[]
+	 * @return array<int, string>
 	 */
 	private function explode(string $input): array
 	{
 		/** @phpstan-ignore-next-line */
-		return array_values(array_filter((array) preg_split('/\W+/u', $input), fn(string $s): bool => $s !== ''));
+		return array_values(array_filter((array) preg_split('/\W+/u', $input), static fn(string $s): bool => $s !== ''));
 	}
 
 
@@ -358,7 +368,7 @@ final class Shorts
 	 * Put the parts together.
 	 * To each initial add a dot ($suffix), and glue all parts together with a space ($glue).
 	 *
-	 * @param string[]|null[] $parts
+	 * @param array<int, string|null> $parts
 	 * @param string $suffix suffix added to each produced initial, usually this would be empty to produce "AB" or a dot to produce "A. Bee"
 	 * @param string $glue glue to put the parts together, usually an empty string to produce "AB" or a space to produce "A. Bee"
 	 */
