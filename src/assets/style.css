@@ -267,8 +267,7 @@ body {
 
 #admin-bar-container #admin-bar-logo {
 	min-width: 5em !important;
-	text-align: center !important;
-	font-family: monospace;
+	padding: 0 .75em !important;
 }
 
 @media (max-width: 767px) {
