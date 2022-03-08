@@ -266,8 +266,12 @@ body {
 }
 
 #admin-bar-container #admin-bar-logo {
-	min-width: 5em !important;
+	min-width: 60px !important;
 	padding: 0 .75em !important;
+}
+
+#admin-bar-container #admin-bar-logo svg {
+	height: 18px !important;
 }
 
 @media (max-width: 767px) {
