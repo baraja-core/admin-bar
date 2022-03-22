@@ -15,10 +15,8 @@ final class Helpers
 
 	public static function isHtmlMode(): bool
 	{
-		$serverHelpers = new ServerHelper;
-		return
-			$serverHelpers->empty('HTTP_X_REQUESTED_WITH')
-			&& $serverHelpers->empty('HTTP_X_TRACY_AJAX')
+		return self::empty('HTTP_X_REQUESTED_WITH')
+			&& self::empty('HTTP_X_TRACY_AJAX')
 			&& PHP_SAPI !== 'cli'
 			&& (bool) preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list())) === false;
 	}
@@ -33,6 +31,14 @@ final class Helpers
 					: $match[0],
 			$haystack,
 		);
+	}
+
+
+	private static function empty(string $key): bool
+	{
+		$return = filter_input(INPUT_SERVER, strtoupper($key), FILTER_SANITIZE_ADD_SLASHES);
+
+		return $return === null || $return === '';
 	}
 
 
