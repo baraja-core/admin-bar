@@ -15,9 +15,10 @@ final class Helpers
 
 	public static function isHtmlMode(): bool
 	{
+		$serverHelpers = new ServerHelper;
 		return
-			ServerHelper::empty('HTTP_X_REQUESTED_WITH')
-			&& ServerHelper::empty('HTTP_X_TRACY_AJAX')
+			$serverHelpers->empty('HTTP_X_REQUESTED_WITH')
+			&& $serverHelpers->empty('HTTP_X_TRACY_AJAX')
 			&& PHP_SAPI !== 'cli'
 			&& (bool) preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list())) === false;
 	}

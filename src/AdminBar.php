@@ -39,7 +39,7 @@ final class AdminBar
 		if (
 			PHP_SAPI === 'cli' // cli mode
 			|| ( // ajax request
-				ServerHelper::lowerEqual('HTTP_X_REQUESTED_WITH', 'xmlhttprequest')
+				(new ServerHelper)->lowerEqual('HTTP_X_REQUESTED_WITH', 'xmlhttprequest')
 			)
 			|| ( // api request
 				class_exists(Url::class)
