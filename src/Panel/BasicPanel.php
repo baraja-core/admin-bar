@@ -12,9 +12,11 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
+	private string $defaultLocale = 'en';
+
+
 	public function __construct(
 		private User $user,
-		private string $defaultLocale = 'en',
 		private ?Localization $localization = null,
 	) {
 	}
