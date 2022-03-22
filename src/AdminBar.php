@@ -36,7 +36,7 @@ final class AdminBar
 	 */
 	public static function enable(?bool $enabled = self::MODE_AUTODETECT): void
 	{
-		$httpXRequestedWith = filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH', FILTER_SANITIZE_ADD_SLASHES);
+		$httpXRequestedWith = filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH', FILTER_SANITIZE_STRING);
 		if (
 			PHP_SAPI === 'cli' // cli mode
 			|| ( // ajax request

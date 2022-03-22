@@ -36,7 +36,7 @@ final class Helpers
 
 	private static function empty(string $key): bool
 	{
-		$return = filter_input(INPUT_SERVER, strtoupper($key), FILTER_SANITIZE_ADD_SLASHES);
+		$return = filter_input(INPUT_SERVER, strtoupper($key), FILTER_SANITIZE_STRING);
 
 		return $return === null || $return === '';
 	}
