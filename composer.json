@@ -23,7 +23,8 @@
 		"phpstan/phpstan-deprecation-rules": "^1.0",
 		"phpstan/phpstan-strict-rules": "^1.0",
 		"spaze/phpstan-disallowed-calls": "^2.0",
-		"roave/security-advisories": "dev-master"
+		"roave/security-advisories": "dev-master",
+		"baraja-core/localization": "^2.0"
 	},
 	"suggest": {
 		"baraja-core/localization": "Baraja localization"

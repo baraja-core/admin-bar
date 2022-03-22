@@ -10,7 +10,7 @@ use Baraja\Localization\Localization;
 use Baraja\Url\Url;
 use Nette\Security\User;
 
-final class BasicPanel implements Panel
+final class BasicLocalePanel implements Panel
 {
 	public function __construct(
 		private Localization $localization,
@@ -22,7 +22,7 @@ final class BasicPanel implements Panel
 	public function getTab(): string
 	{
 		$default = $this->localization->getDefaultLocale();
-		$current = $this->localization->getLocale() ?? $default;
+		$current = $this->localization->getLocale();
 		$baseUrl = Url::get()->getBaseUrl();
 		$localeParam = $default !== $current ? '?locale=' . $current : '';
 
