@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 use Baraja\AdminBar\Panel\BasicPanel;
+use Baraja\Localization\Localization;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
@@ -36,7 +37,7 @@ final class AdminBarExtension extends CompilerExtension
 			->setAutowired(BasicPanel::class);
 		$defaultLocale = $config->defaultLocale;
 
-		if ($defaultLocale !== null) {
+		if ($defaultLocale !== null && !class_exists(Localization::class)) {
 			$basicPanel->addSetup('setDefaultLocale', [$defaultLocale]);
 		}
 	}
