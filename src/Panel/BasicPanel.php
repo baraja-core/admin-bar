@@ -10,21 +10,35 @@ use Baraja\Localization\Localization;
 use Baraja\Url\Url;
 use Nette\Security\User;
 
-final class BasicLocalePanel implements Panel
+final class BasicPanel implements Panel
 {
+	private string $defaultLocale = 'en';
+
+
 	public function __construct(
-		private Localization $localization,
 		private User $user,
+		private ?Localization $localization = null,
 	) {
+	}
+
+
+	public function setDefaultLocale(string $localeStr): void
+	{
+		$this->defaultLocale = $localeStr;
 	}
 
 
 	public function getTab(): string
 	{
-		$default = $this->localization->getDefaultLocale();
-		$current = $this->localization->getLocale();
-		$baseUrl = Url::get()->getBaseUrl();
+		$default = $current = $this->defaultLocale;
+		if ($this->localization !== null) {
+			$default = $this->localization->getDefaultLocale();
+			$current = $this->localization->getLocale();
+		}
+
 		$localeParam = $default !== $current ? '?locale=' . $current : '';
+
+		$baseUrl = Url::get()->getBaseUrl();
 
 		$buttons = [];
 		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Home</a>', $baseUrl . $localeParam);

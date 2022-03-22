@@ -15,13 +15,15 @@ final class Helpers
 
 	public static function isHtmlMode(): bool
 	{
-		$httpXRequestedWith = !isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-							|| (string) $_SERVER['HTTP_X_REQUESTED_WITH'] === '';
-
-		$httpXTracyAjax = !isset($_SERVER['HTTP_X_TRACY_AJAX'])
-						|| (string) $_SERVER['HTTP_X_TRACY_AJAX'] === '';
-
-		return $httpXRequestedWith && $httpXTracyAjax
+		return
+			(
+				!isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+				|| (string) $_SERVER['HTTP_X_REQUESTED_WITH'] === ''
+			)
+			&& (
+				!isset($_SERVER['HTTP_X_TRACY_AJAX'])
+				|| (string) $_SERVER['HTTP_X_TRACY_AJAX'] === ''
+			)
 			&& PHP_SAPI !== 'cli'
 			&& (bool) preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list())) === false;
 	}
@@ -31,7 +33,9 @@ final class Helpers
 	{
 		return (string) preg_replace_callback(
 			'#[ \t\r\n]+|<(/)?(textarea|pre)(?=\W)#i',
-			static fn(array $match) => !isset($match[2]) || $match[2] === '' ? ' ' : $match[0],
+			static fn(array $match) => !isset($match[2]) || $match[2] === ''
+					? ' '
+					: $match[0],
 			$haystack,
 		);
 	}

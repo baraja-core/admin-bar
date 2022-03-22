@@ -5,31 +5,38 @@ declare(strict_types=1);
 namespace Baraja\AdminBar;
 
 
-use Baraja\AdminBar\Panel\BasicLocalePanel;
-use Baraja\Localization\Localization;
+use Baraja\AdminBar\Panel\BasicPanel;
 use Nette\DI\CompilerExtension;
-use Nette\DI\ContainerBuilder;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Nette\Security\User;
+use stdClass;
 
 final class AdminBarExtension extends CompilerExtension
 {
-	public function hasLocalization(ContainerBuilder $builder): bool
+	public function getConfigSchema(): Schema
 	{
-		return class_exists(Localization::class) && $builder->hasDefinition('localization');
+		return Expect::structure(
+			[
+				'defaultLocale' => Expect::string('en'),
+			],
+		);
 	}
 
 
 	public function beforeCompile(): void
 	{
+		/** @var stdClass{defaultLocale: string} $config */
+		$config = $this->config;
+
 		$builder = $this->getContainerBuilder();
 
-		if ($this->hasLocalization($builder)) {
-			$builder->addDefinition($this->prefix('basicLocalPanel'))
-				->setFactory(BasicLocalePanel::class)
-				->setAutowired(BasicLocalePanel::class);
-		}
+		$builder->addDefinition($this->prefix('basicPanel'))
+			->setFactory(BasicPanel::class)
+			->addSetup('setDefaultLocale', [$config->defaultLocale])
+			->setAutowired(BasicPanel::class);
 	}
 
 
@@ -41,27 +48,23 @@ final class AdminBarExtension extends CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
+		/** @var ServiceDefinition $basicPanel */
+		$basicPanel = $builder->getDefinitionByType(BasicPanel::class);
+
 		/** @var ServiceDefinition $netteUser */
 		$netteUser = $builder->getDefinitionByType(User::class);
-
-		$args = [
-			$netteUser->getName(),
-		];
-
-		if ($this->hasLocalization($builder)) {
-			/** @var ServiceDefinition $basicPanel */
-			$basicPanel = $builder->getDefinitionByType(BasicLocalePanel::class);
-			$args[] = $basicPanel->getName();
-		}
 
 		$class->getMethod('initialize')->addBody(
 			'// admin bar.' . "\n"
 			. '(function () {' . "\n"
 			. "\t" . AdminBar::class . '::setNetteUser($this->getService(?));' . "\n"
-			. ($this->hasLocalization($builder) ? "\t" . AdminBar::class . '::getBar()->addPanel($this->getService(?));' . "\n" : '')
+			. "\t" . AdminBar::class . '::getBar()->addPanel($this->getService(?));' . "\n"
 			. "\t" . AdminBar::class . '::enable();' . "\n"
 			. '})();',
-			$args,
+			[
+				$netteUser->getName(),
+				$basicPanel->getName(),
+			],
 		);
 	}
 }

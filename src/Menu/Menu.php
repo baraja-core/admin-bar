@@ -50,10 +50,7 @@ final class Menu
 
 	private function registerGroup(?string $group): string
 	{
-		$group = is_string($group) === false
-			? 'default'
-			: $group;
-
+		$group = $group !== null && $group !== '' ? $group : 'default';
 		if (isset($this->items[$group]) === false) {
 			$this->items[$group] = [];
 		}
