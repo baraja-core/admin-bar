@@ -12,35 +12,27 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
-	private string $defaultLocale = 'en';
-
-	private ?Localization $localization = null;
-
-
 	public function __construct(
 		private User $user,
+		private string $defaultLocale = 'en',
+		private ?Localization $localization = null,
 	) {
 	}
 
 
-	public function setDefaultLocale(string $localeStr): void
+	public function setDefaultLocale(string $locale): void
 	{
-		$this->defaultLocale = $localeStr;
-	}
-
-
-	public function setLocalization(Localization $localization): void
-	{
-		$this->localization = $localization;
+		$this->defaultLocale = $locale;
 	}
 
 
 	public function getTab(): string
 	{
-		$default = $current = $this->defaultLocale;
 		if ($this->localization !== null) {
 			$default = $this->localization->getDefaultLocale();
 			$current = $this->localization->getLocale();
+		} else {
+			$default = $current = $this->defaultLocale;
 		}
 
 		$localeParam = $default !== $current ? '?locale=' . $current : '';

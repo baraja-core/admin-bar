@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Baraja\AdminBar;
 
-
 use Baraja\AdminBar\Panel\BasicPanel;
-use Baraja\Localization\Localization;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
@@ -21,7 +19,7 @@ final class AdminBarExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return new Structure(
-			['defaultLocale' => (new Type('string'))->default('en')],
+			['defaultLocale' => (new Type('string'))->default(null)],
 		);
 	}
 
@@ -33,14 +31,13 @@ final class AdminBarExtension extends CompilerExtension
 
 		$builder = $this->getContainerBuilder();
 
-		$basicPanel = $builder->addDefinition($this->prefix('basicPanel'));
-		$basicPanel->setFactory(BasicPanel::class)
-			->addSetup('setDefaultLocale', [$config->defaultLocale])
+		$basicPanel = $builder->addDefinition($this->prefix('basicPanel'))
+			->setFactory(BasicPanel::class)
 			->setAutowired(BasicPanel::class);
+		$defaultLocale = $config->defaultLocale;
 
-		if (class_exists(Localization::class) && is_string($builder->getByType(Localization::class)) !== false) {
-			$localization = $builder->getDefinitionByType(Localization::class);
-			$basicPanel->addSetup('setLocalization', [$localization]);
+		if ($defaultLocale !== null) {
+			$basicPanel->addSetup('setDefaultLocale', [$defaultLocale]);
 		}
 	}
 

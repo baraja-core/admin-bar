@@ -18,7 +18,7 @@ final class Helpers
 		return self::empty('HTTP_X_REQUESTED_WITH')
 			&& self::empty('HTTP_X_TRACY_AJAX')
 			&& PHP_SAPI !== 'cli'
-			&& (bool) preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list())) === false;
+			&& preg_match('#^Content-Type: (?!text/html)#im', implode("\n", headers_list())) !== 1;
 	}
 
 
@@ -36,7 +36,7 @@ final class Helpers
 
 	private static function empty(string $key): bool
 	{
-		$return = filter_input(INPUT_SERVER, strtoupper($key), FILTER_SANITIZE_STRING);
+		$return = filter_input(INPUT_SERVER, strtoupper($key), FILTER_UNSAFE_RAW);
 
 		return $return === null || $return === '';
 	}
