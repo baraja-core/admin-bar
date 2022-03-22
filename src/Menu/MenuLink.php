@@ -21,7 +21,8 @@ final class MenuLink extends MenuItem
 		$url = trim((string) preg_replace('/\s+/', '', $url));
 		if (Validators::isUrl($url) === false) {
 			throw new \InvalidArgumentException(
-				sprintf('URL is not valid, because "%s" (length: %d bytes, base64: "%s") given.',
+				sprintf(
+					'URL is not valid, because "%s" (length: %d bytes, base64: "%s") given.',
 					$url,
 					strlen($url),
 					base64_encode($url),

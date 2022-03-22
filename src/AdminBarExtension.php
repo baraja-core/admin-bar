@@ -15,11 +15,11 @@ use Nette\Security\User;
 
 final class AdminBarExtension extends CompilerExtension
 {
-
 	public function hasLocalization(ContainerBuilder $builder): bool
 	{
 		return class_exists(Localization::class) && $builder->hasDefinition('localization');
 	}
+
 
 	public function beforeCompile(): void
 	{
