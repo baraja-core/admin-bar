@@ -10,7 +10,8 @@ use Baraja\Localization\Localization;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
 use Nette\PhpGenerator\ClassType;
-use Nette\Schema\Expect;
+use Nette\Schema\Elements\Structure;
+use Nette\Schema\Elements\Type;
 use Nette\Schema\Schema;
 use Nette\Security\User;
 use stdClass;
@@ -19,10 +20,8 @@ final class AdminBarExtension extends CompilerExtension
 {
 	public function getConfigSchema(): Schema
 	{
-		return Expect::structure(
-			[
-				'defaultLocale' => Expect::string('en'),
-			],
+		return new Structure(
+			['defaultLocale' => (new Type('string'))->default('en')],
 		);
 	}
 
