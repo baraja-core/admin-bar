@@ -27,7 +27,7 @@
 		"baraja-core/localization": "^2.0"
 	},
 	"suggest": {
-		"baraja-core/localization": "Baraja localization"
+		"baraja-core/localization": "Global localization resolver by current context."
 	},
 	"autoload": {
 		"classmap": [
