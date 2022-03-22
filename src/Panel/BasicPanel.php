@@ -14,10 +14,11 @@ final class BasicPanel implements Panel
 {
 	private string $defaultLocale = 'en';
 
+	private ?Localization $localization = null;
+
 
 	public function __construct(
 		private User $user,
-		private ?Localization $localization = null,
 	) {
 	}
 
@@ -25,6 +26,12 @@ final class BasicPanel implements Panel
 	public function setDefaultLocale(string $localeStr): void
 	{
 		$this->defaultLocale = $localeStr;
+	}
+
+
+	public function setLocalization(Localization $localization): void
+	{
+		$this->localization = $localization;
 	}
 
 
