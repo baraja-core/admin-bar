@@ -6,20 +6,28 @@ namespace Baraja\AdminBar;
 
 final class ServerHelper
 {
-	public static function get(string $key): mixed
+	public static function get(string $key): ?string
 	{
-		return $_SERVER[$key] ?? null;
+		$serverValue = filter_input(INPUT_SERVER, strtoupper($key), FILTER_SANITIZE_STRING);
+
+		return $serverValue !== null && $serverValue !== false
+			? $serverValue
+			: null;
 	}
 
 
 	public static function empty(string $key): bool
 	{
-		return !isset($_SERVER[$key]) || (string) $_SERVER[$key] === '';
+		$serverValue = self::get($key);
+
+		return $serverValue === null || $serverValue === '';
 	}
 
 
 	public static function lowerEqual(string $key, string $value): bool
 	{
-		return isset($_SERVER[$key]) && strtolower($_SERVER[$key]) === $value;
+		$serverValue = self::get($key);
+
+		return is_string($serverValue) !== false && strtolower($serverValue) === $value;
 	}
 }
