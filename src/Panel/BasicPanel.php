@@ -12,7 +12,7 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
-	private string $defaultLocale = 'en';
+	private ?string $defaultLocale = null;
 
 
 	public function __construct(
@@ -30,20 +30,18 @@ final class BasicPanel implements Panel
 
 	public function getTab(): string
 	{
+		$baseUrl = Url::get()->getBaseUrl();
 		if ($this->localization !== null) {
 			$default = $this->localization->getDefaultLocale();
 			$current = $this->localization->getLocale();
+			$localeParam = $default !== $current ? sprintf('?locale=%s', urlencode($current)) : '';
 		} else {
-			$default = $current = $this->defaultLocale;
+			$localeParam = $this->defaultLocale !== null ? sprintf('?locale=%s', urlencode($this->defaultLocale)) : '';
 		}
-
-		$localeParam = $default !== $current ? '?locale=' . $current : '';
-
-		$baseUrl = Url::get()->getBaseUrl();
 
 		$buttons = [];
 		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Home</a>', $baseUrl . $localeParam);
-		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', $baseUrl . '/admin' . $localeParam);
+		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', sprintf('%s/admin%s', $baseUrl, $localeParam));
 
 		$apiDoc = $this->processApiDocumentation($baseUrl);
 		if ($apiDoc !== null) {
