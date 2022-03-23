@@ -12,23 +12,36 @@ use Nette\Security\User;
 
 final class BasicPanel implements Panel
 {
+	private ?string $defaultLocale = null;
+
+
 	public function __construct(
-		private Localization $localization,
 		private User $user,
+		private ?Localization $localization = null,
 	) {
+	}
+
+
+	public function setDefaultLocale(string $locale): void
+	{
+		$this->defaultLocale = $locale;
 	}
 
 
 	public function getTab(): string
 	{
-		$default = $this->localization->getDefaultLocale();
-		$current = $this->localization->getLocale() ?? $default;
 		$baseUrl = Url::get()->getBaseUrl();
-		$localeParam = $default !== $current ? '?locale=' . $current : '';
+		if ($this->localization !== null) {
+			$default = $this->localization->getDefaultLocale();
+			$current = $this->localization->getLocale();
+			$localeParam = $default !== $current ? sprintf('?locale=%s', urlencode($current)) : '';
+		} else {
+			$localeParam = $this->defaultLocale !== null ? sprintf('?locale=%s', urlencode($this->defaultLocale)) : '';
+		}
 
 		$buttons = [];
 		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Home</a>', $baseUrl . $localeParam);
-		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', $baseUrl . '/admin' . $localeParam);
+		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', sprintf('%s/admin%s', $baseUrl, $localeParam));
 
 		$apiDoc = $this->processApiDocumentation($baseUrl);
 		if ($apiDoc !== null) {

@@ -20,6 +20,8 @@ body, #tracy-bs {
 	will-change: opacity, top, left;
 	line-height: 1 !important;
 	color: black !important;
+	background: #1b1f23;
+	border: 0 !important;
 }
 
 .admin-bar-container-debugMode {
@@ -79,6 +81,7 @@ body, #tracy-bs {
 #admin-bar-container table tr td {
 	padding: 0 !important;
 	margin: 0 !important;
+	border: 0 !important;
 }
 
 #admin-bar-container .admin-bar-user * {

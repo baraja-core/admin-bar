@@ -8,7 +8,7 @@ namespace Baraja\AdminBar\User;
 use Nette\Security\SimpleIdentity;
 use Nette\Utils\Validators;
 
-final class AdminIdentity extends SimpleIdentity
+class AdminIdentity extends SimpleIdentity
 {
 	private ?string $name;
 

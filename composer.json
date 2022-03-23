@@ -13,7 +13,6 @@
 		"nette/utils": "^3.0",
 		"nette/security": "^3.0",
 		"nette/di": "^3.0",
-		"baraja-core/localization": "^2.0",
 		"baraja-core/url": "^1.1"
 	},
 	"require-dev": {
@@ -24,7 +23,11 @@
 		"phpstan/phpstan-deprecation-rules": "^1.0",
 		"phpstan/phpstan-strict-rules": "^1.0",
 		"spaze/phpstan-disallowed-calls": "^2.0",
-		"roave/security-advisories": "dev-master"
+		"roave/security-advisories": "dev-master",
+		"baraja-core/localization": "^2.0"
+	},
+	"suggest": {
+		"baraja-core/localization": "Global localization resolver by current context."
 	},
 	"autoload": {
 		"classmap": [

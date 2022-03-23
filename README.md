@@ -22,6 +22,8 @@ $ composer require baraja-core/admin-bar
 
 You can use the package manually by creating an instance of the internal classes, or register a DIC extension to link the services directly to the Nette Framework.
 
+To use the AdminBarExtension, implement AdminIdentity.php into your project.
+
 AdminBar will adapt to what you are doing
 -----------------------------------------
 
