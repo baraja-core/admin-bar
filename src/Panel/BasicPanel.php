@@ -36,7 +36,9 @@ final class BasicPanel implements Panel
 			$current = $this->localization->getLocale();
 			$localeParam = $default !== $current ? sprintf('?locale=%s', urlencode($current)) : '';
 		} else {
-			$localeParam = $this->defaultLocale !== null ? sprintf('?locale=%s', urlencode($this->defaultLocale)) : '';
+			$localeParam = $this->defaultLocale !== null
+				? sprintf('?locale=%s', urlencode($this->defaultLocale))
+				: '';
 		}
 
 		$buttons = [];
