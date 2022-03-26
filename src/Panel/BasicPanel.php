@@ -41,7 +41,9 @@ final class BasicPanel implements Panel
 
 		$buttons = [];
 		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Home</a>', $baseUrl . $localeParam);
-		$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', sprintf('%s/admin%s', $baseUrl, $localeParam));
+		if (\class_exists('\Baraja\Cms\Admin')) {
+			$buttons[] = sprintf('<a href="%s" class="btn btn-primary">Admin</a>', sprintf('%s/admin%s', $baseUrl, $localeParam));
+		}
 
 		$apiDoc = $this->processApiDocumentation($baseUrl);
 		if ($apiDoc !== null) {
