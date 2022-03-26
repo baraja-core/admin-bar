@@ -14,8 +14,8 @@ use Baraja\AdminBar\User\User;
  * @var array<string, array<int, MenuItem|null>> $menuItems
  * @var string $basePath
  * @var User|null $user
- * @var Panel[] $panels
- * @var Plugin[] $plugins
+ * @var array<int, Panel> $panels
+ * @var array<int, Plugin> $plugins
  * @var bool $debugMode
  * @var bool $enableVue
  */
@@ -31,9 +31,7 @@ use Baraja\AdminBar\User\User;
 				<ul class="admin-bar-tab-area">
 					<?php
 					foreach ($panels as $panel) {
-						echo '<li class="admin-bar-tab">';
-						echo $panel->getTab();
-						echo '</li>';
+						echo sprintf('<li class="admin-bar-tab">%s</li>', $panel->getTab());
 					}
 					?>
 				</ul>
@@ -41,9 +39,7 @@ use Baraja\AdminBar\User\User;
 			<td style="width:100%"></td>
 			<?php
 			foreach ($plugins as $plugin) {
-				echo '<td class="admin-bar-panel">';
-				echo $plugin->render();
-				echo '</td>';
+				echo sprintf('<td class="admin-bar-panel">%s</td>', $plugin->render());
 			}
 			?>
 			<td class="admin-bar-panel admin-bar-user" role="navigation">
@@ -52,7 +48,8 @@ use Baraja\AdminBar\User\User;
 						<td style="width:50% !important"></td>
 						<td style="width:40px;text-align:right">
 						<?php
-							if (($avatarUrl = $user !== null ? $user->getAvatarUrl() : null) !== null) {
+							$avatarUrl = $user?->getAvatarUrl();
+							if ($avatarUrl !== null) {
 								echo '<img src="' . $avatarUrl . '" alt="Avatar" style="max-width:32px !important;max-height:32px !important;margin:0 8px !important;image-rendering:crisp-edges">';
 							} else {
 								echo Helpers::iconUser();
@@ -62,8 +59,12 @@ use Baraja\AdminBar\User\User;
 						<td class="admin-bar-panel__label">
 							<span class="admin-bar-identity text-nowrap">
 							<?php
-							echo Helpers::escapeHtml($user !== null ? ($user->getName() ?? 'Guest') : 'Guest');
-							echo ($user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '');
+							$defaultUserName = 'Guest';
+							echo sprintf(
+								'%s%s',
+								Helpers::escapeHtml($user !== null ? ($user->getName() ?? $defaultUserName) : $defaultUserName),
+								$user !== null ? '&nbsp;<i class="admin-bar-dropdown-toggle"></i>' : '',
+							);
 							?>
 							</span>
 						</td>
@@ -73,7 +74,7 @@ use Baraja\AdminBar\User\User;
 				<ul>
 				<?php
 				if ($user !== null) {
-					echo '<li class="text-left"><a href="' . $basePath . '/admin" class="ml-2">Dashboard</a></li>';
+					echo sprintf('<li class="text-left"><a href="%s" class="ml-2">Dashboard</a></li>', $basePath . '/admin');
 					echo '<hr class="w-100 my-2">';
 				}
 
@@ -87,7 +88,7 @@ use Baraja\AdminBar\User\User;
 							echo '<hr class="w-100 my-2">';
 						} else {
 							echo '<li class="text-left">';
-							echo '<div class="ml-2">' . $menuItem->render() . '</div>';
+							echo sprintf('<div class="ml-2">%s</div>', $menuItem->render());
 							echo '</li>';
 						}
 					}
